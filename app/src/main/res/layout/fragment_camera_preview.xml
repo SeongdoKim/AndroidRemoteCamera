@@ -3,12 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textview_conn_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
+        android:text="@string/hint_connection_status" />
+
     <seongdokim.remotecamera.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@id/textview_conn_status"/>
 
     <LinearLayout
         android:id="@+id/control"
@@ -18,19 +26,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:background="@color/control_background">
-        <TextView
-            android:id="@+id/textview_ip_address"
+        <Button
+            android:id="@+id/frag_main_button_connect"
+            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/ip_address" />
-
-        <TextView
-            android:id="@+id/textview_conn_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/ip_address" />
+            android:text="@string/btn_caption_connect"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

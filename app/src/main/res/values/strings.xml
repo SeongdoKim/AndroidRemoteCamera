@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">RemoteCamera</string>
+    <string name="hint_connection_status">Connection status is showing here</string>
     <string name="ip_address">IP is showing here</string>
+    <string name="request_permission">The application requires camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+
+    <!--  Buttons -->
+    <string name="btn_caption_connect">Connect</string>
+    <string name="btn_caption_disconnect">Disconnect</string>
+    <string name="btn_caption_cancel">Cancel</string>
+
+    <!-- WiFi connection -->
+    <string name="title_input_ip_address">Please input IP address and port number to connect</string>
+    <string name="hint_ip_address">Input IP address (000.000.000.000)</string>
 </resources>
