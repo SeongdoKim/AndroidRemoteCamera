@@ -355,7 +355,11 @@ public class ConnectionThread {
 
                     switch (request_code) {
                         case Constants.REQUEST_STREAMING:
-                            ImageData imageData = popImage();
+                            ImageData imageData = null;
+                            while (imageData == null) {
+                                imageData = popImage();
+                            }
+
                             jsonObjSend = new JSONObject();
                             try {
                                 jsonObjSend.put(Constants.REQUEST_FIELD, Constants.REQUEST_STREAMING);
@@ -375,6 +379,14 @@ public class ConnectionThread {
                                 e.printStackTrace();
                             }
                             mOutStream.write(imageData.ImageData);
+
+                            // Receive an acknowledgement
+                            bytes = mInStream.read(buffer);
+                            try {
+                                JSONObject jsonObjReceive = new JSONObject(new String(buffer, 0, bytes));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             pushRequest(Constants.REQUEST_STREAMING);
 
@@ -414,11 +426,9 @@ public class ConnectionThread {
          */
         public void write(byte[] buffer) {
             try {
+                Log.d(TAG, "Write " + buffer.length + "bytes");
                 mOutStream.write(buffer);
-
-                // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
+                mOutStream.flush();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
@@ -489,6 +499,9 @@ public class ConnectionThread {
         try {
             if (!mImageQueueLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock the image queue");
+            }
+            if (mImageQueue.size() > 3) {
+                mImageQueue.poll();
             }
             mImageQueue.push(new ImageData(raw_data, width, height));
             mImageQueueLock.release();

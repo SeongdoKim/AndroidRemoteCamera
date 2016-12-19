@@ -367,6 +367,14 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_camera_preview, container, false);
@@ -379,6 +387,14 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
 
         mConnectButton.setOnClickListener(this);
+
+        if (mConnectionThread != null &&
+                mConnectionThread.getState() == ConnectionThread.STATE_CONNECTED) {
+            mConnectButton.setText(R.string.btn_caption_disconnect);
+        }
+        else {
+            mConnectButton.setText(R.string.btn_caption_connect);
+        }
     }
 
     @Override
@@ -559,20 +575,6 @@ public class CameraPreviewFragment extends Fragment implements View.OnClickListe
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Retrieves the JPEG orientation from the specified screen rotation.
-     *
-     * @param rotation The screen rotation.
-     * @return The JPEG orientation (one of 0, 90, 270, and 360)
-     */
-    private int getOrientation(int rotation) {
-        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-        // We have to take that into account and rotate JPEG properly.
-        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
-        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
     /**
